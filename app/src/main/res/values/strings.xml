@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Geosurf</string>
+    <string name="button_addGeosurf">Add Surf Spot</string>
+    <string name="hint_geosurfTitle">Surf Spot Title</string>
+    <string name="hint_geosurfDescription">Description </string>
+    <string name="hint_geosurfAbilityLevel">SurfSpot Ability Level</string>
+    <string name="hint_geosurfDate">Date</string>
+    <string name="menu_addGeosurf">Add</string>
+    <string name="menu_cancelGeosurf">Cancel</string>
+    <string name="enter_geosurf_title"> Please enter a SurfSpot Title </string>
+    <string name="save_geosurf"> Save Surf Spot </string>
+    <string name="button_addImage"> Add Image </string>
+    <string name="select_geosurf_image">Select surf spot image</string>
+    <string name="change_geosurf_image">Change surf spot image</string>
+    <string name="button_location">Set Location</string>
+    <string name="title_activity_map">Surf Map</string>
+    <string name="menu_deleteGeosurf">Delete</string>
+    <string name="selected_abilityLevel">Ability Level:</string>
+    <string name="update_date">Change Date</string>
+    <string name="geosurf_rating_header">Rate SurfSpot</string>
+    <string name="warning_incorrect_credentials">Incorrect Login Credentials</string>
+    <string name="login_message">Sign in</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="button_sign_in">Sign in</string>
+    <string name="button_register">Sign Up</string>
+    <string name="register_message">Create a new account</string>
+    <string name="create_account">Create Account</string>
+    <string name="new_user">Create an account?</string>
+    <string name="loggedIn">You are logged in!</string>
+    <string name="logout">Logout</string>
+    <string name="image">image</string>
+    <string name="button_geosurfList">Manage your SurfSpots</string>
+
+
+    <string-array name="abilityLevels">
+        <item>Select Ability Level advised for this Surfspot</item>
+        <item>Beginner</item>
+        <item>Intermediate</item>
+        <item>Advanced</item>
+        <item>Pro</item>
+    </string-array>
+</resources>
