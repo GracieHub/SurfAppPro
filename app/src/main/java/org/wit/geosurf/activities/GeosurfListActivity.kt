@@ -21,6 +21,7 @@ class GeosurfListActivity : AppCompatActivity(), GeosurfListener {
     lateinit var app: MainApp
     private lateinit var binding: ActivityGeosurfListBinding
     private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,7 @@ class GeosurfListActivity : AppCompatActivity(), GeosurfListener {
         loadGeosurfs()
 
         registerRefreshCallback()
+        registerMapCallback()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -49,9 +51,13 @@ class GeosurfListActivity : AppCompatActivity(), GeosurfListener {
                 val launcherIntent = Intent(this, GeosurfActivity::class.java)
                 refreshIntentLauncher.launch(launcherIntent)
             }
+                R.id.item_map -> {
+                    val launcherIntent = Intent(this, GeosurfMapsActivity::class.java)
+                    mapIntentLauncher.launch(launcherIntent)
+                }
+            }
+            return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
-    }
 
     override fun onGeosurfClick(geosurf: GeosurfModel) {
         val launcherIntent = Intent(this, GeosurfActivity::class.java)
@@ -64,6 +70,13 @@ class GeosurfListActivity : AppCompatActivity(), GeosurfListener {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { loadGeosurfs() }
     }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { }
+    }
+
 
     private fun loadGeosurfs() {
         showGeosurfs(app.geosurfs.findAll())
