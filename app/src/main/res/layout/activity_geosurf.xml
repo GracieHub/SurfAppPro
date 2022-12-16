@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.wit.geosurf.activities.GeosurfActivity">
+    tools:context="org.wit.geosurf.views.geosurf.GeosurfView">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -56,7 +57,7 @@
                 <EditText
                     android:id="@+id/geosurfTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="48dp"
                     android:layout_margin="8dp"
                     android:autofillHints=""
                     android:hint="@string/hint_geosurfTitle"
@@ -76,6 +77,7 @@
                     android:inputType="text"
                     android:maxLength="25"
                     android:maxLines="1"
+                    android:minHeight="48dp"
                     android:padding="8dp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="14sp" />
@@ -91,6 +93,7 @@
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColor="@color/purple_500"
+                    android:textColorHint="#757575"
                     android:textSize="14sp" />
 
                 <Button
@@ -100,6 +103,7 @@
                     android:layout_margin="16dp"
                     android:onClick="clickDataPicker"
                     android:text="Select Date"
+                    android:textColor="#212121"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -113,7 +117,7 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:text="@string/button_addImage"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="#212121"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -132,7 +136,7 @@
                     android:paddingBottom="8dp"
                     android:stateListAnimator="@null"
                     android:text="@string/button_location"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="#212121"
                     android:textSize="16sp" />
 
                 <Spinner
@@ -141,14 +145,17 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:background="@color/colorAccent"
+                    android:contentDescription="@string/hint_geosurfAbilityLevel"
                     android:hint="@string/hint_geosurfAbilityLevel"
                     android:inputType="text"
                     android:maxLength="25"
                     android:maxLines="1"
+                    android:minHeight="48dp"
                     android:padding="15dp"
                     android:spinnerMode="dropdown"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/rating_header"
@@ -167,6 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:background="@color/colorPrimary"
+                    android:contentDescription="@string/geosurf_rating_header"
                     android:gravity="center"
                     android:numStars="5"
                     android:stepSize="0.5"

@@ -1,24 +1,22 @@
-package org.wit.geosurf.activities
+package org.wit.geosurf.views.map
 
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import org.wit.geosurf.R
+import com.squareup.picasso.Picasso
 import org.wit.geosurf.databinding.ActivityGeosurfMapsBinding
 import org.wit.geosurf.databinding.ContentGeosurfMapsBinding
 import org.wit.geosurf.main.MainApp
+import org.wit.geosurf.models.GeosurfModel
 
-class GeosurfMapsActivity : AppCompatActivity() , GoogleMap.OnMarkerClickListener {
+
+class GeosurfMapView : AppCompatActivity() , GoogleMap.OnMarkerClickListener{
 
     private lateinit var binding: ActivityGeosurfMapsBinding
     private lateinit var contentBinding: ContentGeosurfMapsBinding
-    lateinit var map: GoogleMap
     lateinit var app: MainApp
+    lateinit var presenter: GeosurfMapPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,30 +25,26 @@ class GeosurfMapsActivity : AppCompatActivity() , GoogleMap.OnMarkerClickListene
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+        presenter = GeosurfMapPresenter(this)
+
         contentBinding = ContentGeosurfMapsBinding.bind(binding.root)
         contentBinding.mapView.onCreate(savedInstanceState)
-        contentBinding.mapView.getMapAsync {
-            map = it
-            configureMap()
+        contentBinding.mapView.getMapAsync{
+            presenter.doPopulateMap(it)
         }
     }
-
-    fun configureMap() {
-        map.setOnMarkerClickListener(this)
-        map.uiSettings.isZoomControlsEnabled = true
-
-        app.geosurfs.findAll().forEach {
-            val loc = LatLng(it.lat, it.lng)
-            val options = MarkerOptions().title(it.title).position(loc)
-            map.addMarker(options).tag = it.id
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, it.zoom))
-        }
+    fun showGeosurf(geosurf: GeosurfModel) {
+        contentBinding.currentTitle.text = geosurf.title
+        contentBinding.currentDescription.text = geosurf.description
+        Picasso.get()
+            .load(geosurf.image)
+            .resize(200,200)
+            .into(contentBinding.currentImage)
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        contentBinding.currentTitle.text = marker.title
-
-        return false
+        presenter.doMarkerSelected(marker)
+        return true
     }
 
     override fun onDestroy() {
@@ -77,6 +71,4 @@ class GeosurfMapsActivity : AppCompatActivity() , GoogleMap.OnMarkerClickListene
         super.onSaveInstanceState(outState)
         contentBinding.mapView.onSaveInstanceState(outState)
     }
-
-
 }

@@ -6,6 +6,7 @@
     <string name="hint_geosurfAbilityLevel">SurfSpot Ability Level</string>
     <string name="hint_geosurfDate">Date</string>
     <string name="menu_addGeosurf">Add</string>
+    <string name="menu_saveGeosurf">Save</string>
     <string name="menu_cancelGeosurf">Cancel</string>
     <string name="enter_geosurf_title"> Please enter a SurfSpot Title </string>
     <string name="save_geosurf"> Save Surf Spot </string>

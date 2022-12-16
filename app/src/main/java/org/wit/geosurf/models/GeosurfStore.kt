@@ -5,4 +5,6 @@ interface GeosurfStore {
     fun create(geosurf: GeosurfModel)
     fun update(geosurf: GeosurfModel)
     fun delete(geosurf: GeosurfModel)
+    fun findById(id:Long) : GeosurfModel?
+
 }

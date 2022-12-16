@@ -43,13 +43,19 @@
             android:exported="true" />
         <activity android:name=".activities.WelcomeActivity" />
         <activity
-            android:name=".activities.MapActivity"
+            android:name=".views.editlocation.EditLocationView"
             android:exported="true"
             android:label="@string/title_activity_map" />
         <activity
-            android:name=".activities.GeosurfListActivity"
+            android:name=".views.geosurflist.GeosurfListView"
             android:exported="true" />
-        <activity android:name=".activities.GeosurfActivity" />
+        <activity
+        android:name=".views.geosurf.GeosurfView"
+        android:exported="true" />
+
+        <activity
+            android:name=".views.map.GeosurfMapView"
+            android:exported="true" />
     </application>
 
 </manifest>

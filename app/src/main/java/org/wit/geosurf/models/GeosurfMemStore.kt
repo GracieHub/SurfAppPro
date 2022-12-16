@@ -46,5 +46,10 @@ class GeosurfMemStore : GeosurfStore {
     override fun delete(geosurf: GeosurfModel) {
         geosurfs.remove(geosurf)
     }
+
+    override fun findById(id:Long) : GeosurfModel? {
+        val foundGeosurf: GeosurfModel? = geosurfs.find { it.id == id }
+        return foundGeosurf
+    }
 }
 

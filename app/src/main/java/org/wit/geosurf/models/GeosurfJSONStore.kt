@@ -77,6 +77,11 @@ class GeosurfJSONStore(private val context: Context) : GeosurfStore {
     private fun logAll() {
         geosurfs.forEach { Timber.i("$it") }
     }
+
+    override fun findById(id:Long) : GeosurfModel? {
+        val foundGeosurf: GeosurfModel? = geosurfs.find { it.id == id }
+        return foundGeosurf
+    }
 }
 
 class UriParser : JsonDeserializer<Uri>,JsonSerializer<Uri> {

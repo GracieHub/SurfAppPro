@@ -6,9 +6,6 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
-import org.wit.geosurf.R
-import org.wit.geosurf.activities.GeosurfListActivity
-import org.wit.geosurf.databinding.ActivityLoginBinding
 import org.wit.geosurf.databinding.ActivityRegisterBinding
 import org.wit.geosurf.main.MainApp
 import org.wit.geosurf.models.UserModel

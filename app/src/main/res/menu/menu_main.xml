@@ -13,4 +13,5 @@
         android:icon="@android:drawable/ic_menu_mapmode"
         android:title="@string/menu_addGeosurf"
         app:showAsAction="always"/>
+
 </menu>

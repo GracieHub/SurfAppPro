@@ -1,20 +1,20 @@
-package org.wit.geosurf.adapters
+package org.wit.geosurf.views.geosurflist
 
 import android.view.LayoutInflater
+import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import org.wit.geosurf.databinding.CardGeosurfBinding
 import org.wit.geosurf.models.GeosurfModel
 
-
-
 interface GeosurfListener {
     fun onGeosurfClick(geosurf: GeosurfModel)
 }
 
-class GeosurfAdapter constructor(private var geosurfs: List<GeosurfModel>,
-                                   private val listener: GeosurfListener) :
+class GeosurfAdapter constructor
+    (private var geosurfs: List<GeosurfModel>,
+     private val listener: GeosurfListener) :
     RecyclerView.Adapter<GeosurfAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -37,8 +37,8 @@ class GeosurfAdapter constructor(private var geosurfs: List<GeosurfModel>,
         fun bind(geosurf: GeosurfModel, listener: GeosurfListener) {
             binding.geosurfTitle.text = geosurf.title
             // binding.geosurfAbilityLevel.text = geosurf.abilityLevel
-            binding.description.text = geosurf.description
-            binding.geosurfDate.text = geosurf.date
+            binding.description.text = ("Descriptions" + geosurf.description)
+            binding.geosurfDate.text = ("Date added: " +geosurf.date)
             Picasso.get().load(geosurf.image).resize(200,200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onGeosurfClick(geosurf) }
 

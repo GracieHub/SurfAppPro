@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import org.wit.geosurf.R
 import org.wit.geosurf.databinding.ActivityWelcomeBinding
 import org.wit.geosurf.main.MainApp
+import org.wit.geosurf.views.geosurflist.GeosurfListView
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
@@ -27,7 +28,7 @@ class WelcomeActivity : AppCompatActivity() {
         //binding.emailId.text = "$emailId"
 
         binding.app.setOnClickListener {
-            startActivity(Intent(this, GeosurfListActivity::class.java))
+            startActivity(Intent(this, GeosurfListView::class.java))
         }
 
         binding.btnLogout.setOnClickListener {

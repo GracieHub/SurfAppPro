@@ -21,7 +21,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:titleTextColor="@color/colorPrimary" >
+            android:background="#7DB6DC"
+            android:backgroundTint="@color/colorAccent"
+            app:contentInsetStart="130dp"
+            app:titleTextColor="@color/colorPrimary">
 
             <TextView
                 android:id="@+id/app_name"
