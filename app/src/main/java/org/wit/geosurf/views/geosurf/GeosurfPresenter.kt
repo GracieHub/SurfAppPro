@@ -1,5 +1,6 @@
 package org.wit.geosurf.views.geosurf
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,30 +13,55 @@ import org.wit.geosurf.models.Location
 import org.wit.geosurf.models.GeosurfModel
 import org.wit.geosurf.views.editlocation.EditLocationView
 import timber.log.Timber
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import org.wit.geosurf.views.editlocation.checkLocationPermissions
+
 
 class GeosurfPresenter ( val view: GeosurfView) {
 
     var geosurf = GeosurfModel()
     lateinit var app: MainApp
     lateinit var binding: ActivityGeosurfBinding
-    private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
-    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+    var locationService: FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(view)
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher: ActivityResultLauncher<Intent>
     val location = Location(52.245696, -7.131902, 15f)
     var edit = false
 
     init {
+
+        doPermissionLauncher()
+        registerImagePickerCallback()
+        registerMapCallback()
+
         binding = ActivityGeosurfBinding.inflate(view.layoutInflater)
         app = view.application as MainApp
         if (view.intent.hasExtra("geosurf_edit")) {
             edit = true
             geosurf = view.intent.extras?.getParcelable("geosurf_edit")!!
             view.showGeosurf(geosurf)
+        } else {
+            if (checkLocationPermissions(view)) {
+                doSetCurrentLocation()
+            }
+            geosurf.lat = location.lat
+            geosurf.lng = location.lng
         }
+        doPermissionLauncher()
         registerImagePickerCallback()
         registerMapCallback()
     }
 
-    fun doAddOrSave(title: String, description: String, date: String, abilityLevel: String, rating: Float) {
+    fun doAddOrSave(
+        title: String,
+        description: String,
+        date: String,
+        abilityLevel: String,
+        rating: Float
+    ) {
         geosurf.title = title
         geosurf.description = description
         geosurf.rating = rating
@@ -54,7 +80,6 @@ class GeosurfPresenter ( val view: GeosurfView) {
     }
 
     fun doSetLocation() {
-        val location = Location(52.245696, -7.139102, 15f)
         if (geosurf.zoom != 0f) {
             location.lat = geosurf.lat
             location.lng = geosurf.lng
@@ -65,7 +90,13 @@ class GeosurfPresenter ( val view: GeosurfView) {
         mapIntentLauncher.launch(launcherIntent)
     }
 
-    fun cacheGeosurf (title: String, description: String, rating: Float, date: String, abilityLevel: String) {
+    fun cacheGeosurf(
+        title: String,
+        description: String,
+        rating: Float,
+        date: String,
+        abilityLevel: String
+    ) {
         geosurf.title = title
         geosurf.description = description
         geosurf.rating = rating
@@ -86,11 +117,27 @@ class GeosurfPresenter ( val view: GeosurfView) {
         view.finish()
     }
 
+
+    fun locationUpdate(lat: Double, lng: Double) {
+        geosurf.lat = lat
+        geosurf.lng = lng
+        geosurf.zoom = 15f
+        // view.showTravelmark(travelmark)
+    }
+
+    @SuppressLint("MissingPermission")
+    fun doSetCurrentLocation() {
+        Timber.i("setting location from doSetLocation")
+        locationService.lastLocation.addOnSuccessListener {
+            locationUpdate(it.latitude, it.longitude)
+        }
+    }
+
     private fun registerImagePickerCallback() {
         imageIntentLauncher =
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { result ->
-                when(result.resultCode){
+                when (result.resultCode) {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
@@ -101,7 +148,8 @@ class GeosurfPresenter ( val view: GeosurfView) {
                                 .into(binding.geosurfImage)
                         } // end of if
                     }
-                    AppCompatActivity.RESULT_CANCELED -> { } else -> { }
+                    AppCompatActivity.RESULT_CANCELED -> {}
+                    else -> {}
                 }
             }
     }
@@ -114,14 +162,29 @@ class GeosurfPresenter ( val view: GeosurfView) {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Location ${result.data.toString()}")
-                            val location = result.data!!.extras?.getParcelable<Location>("location")!!
+                            val location =
+                                result.data!!.extras?.getParcelable<Location>("location")!!
                             Timber.i("Location == $location")
                             geosurf.lat = location.lat
                             geosurf.lng = location.lng
                             geosurf.zoom = location.zoom
                         } // end of if
                     }
-                    AppCompatActivity.RESULT_CANCELED -> { } else -> { }
+                    AppCompatActivity.RESULT_CANCELED -> {}
+                    else -> {}
+                }
+            }
+    }
+
+    private fun doPermissionLauncher() {
+        Timber.i("permission check called")
+        requestPermissionLauncher =
+            view.registerForActivityResult(ActivityResultContracts.RequestPermission())
+            { isGranted: Boolean ->
+                if (isGranted) {
+                    doSetCurrentLocation()
+                } else {
+                    locationUpdate(location.lat, location.lng)
                 }
             }
     }

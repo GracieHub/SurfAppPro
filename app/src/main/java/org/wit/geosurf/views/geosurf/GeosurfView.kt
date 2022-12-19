@@ -147,6 +147,13 @@ class GeosurfView : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_geosurf, menu)
+        val deleteMenu: MenuItem = menu.findItem(R.id.item_delete)
+        if (presenter.edit){
+            deleteMenu.setVisible(true)
+        }
+        else{
+            deleteMenu.setVisible(false)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 

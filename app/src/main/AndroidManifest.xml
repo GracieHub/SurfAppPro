@@ -3,6 +3,8 @@
     package="org.wit.geosurf">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
 
     <application
         android:name=".main.MainApp"
@@ -41,7 +43,6 @@
         <activity
             android:name=".views.register.RegisterView"
             android:exported="true" />
-        <activity android:name=".views.welcome.WelcomeView" />
         <activity
             android:name=".views.editlocation.EditLocationView"
             android:exported="true"
