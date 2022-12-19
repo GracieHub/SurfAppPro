@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Geosurf">
 
         <activity
-            android:name=".activities.GeosurfMapsActivity"
+            android:name=".views.map.GeosurfMapView"
             android:exported="true"
             android:label="@string/title_activity_geosurf_maps"
             android:theme="@style/Theme.Geosurf.NoActionBar" />
@@ -27,7 +27,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name=".views.splash.SplashScreenView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,12 +36,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".views.login.LoginView"
             android:exported="true" />
         <activity
-            android:name=".activities.RegisterActivity"
+            android:name=".views.register.RegisterView"
             android:exported="true" />
-        <activity android:name=".activities.WelcomeActivity" />
+        <activity android:name=".views.welcome.WelcomeView" />
         <activity
             android:name=".views.editlocation.EditLocationView"
             android:exported="true"
@@ -53,9 +53,6 @@
         android:name=".views.geosurf.GeosurfView"
         android:exported="true" />
 
-        <activity
-            android:name=".views.map.GeosurfMapView"
-            android:exported="true" />
     </application>
 
 </manifest>

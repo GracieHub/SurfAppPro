@@ -1,32 +1,27 @@
-package org.wit.geosurf.activities
+package org.wit.geosurf.views.register
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import org.wit.geosurf.databinding.ActivityRegisterBinding
 import org.wit.geosurf.main.MainApp
 import org.wit.geosurf.models.UserModel
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterView : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var geosurfIntentLauncher : ActivityResultLauncher<Intent>
     lateinit var app : MainApp
+    lateinit var presenter: RegisterPresenter
 
     var user = UserModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        registerGeosurfCallback()
-
         app = application as MainApp
+
+        presenter = RegisterPresenter(this)
 
         binding.registerButton.setOnClickListener {
             user.username = binding.username.text.toString()
@@ -39,13 +34,10 @@ class RegisterActivity : AppCompatActivity() {
                 user.password = ""
                 binding.password.setError("Password must be 3 characters or more")
             }
-            if(!user.username.isNullOrBlank() && !user.password.isNullOrBlank()){
-                app.users.createUser(user.copy())
+            if(presenter.doRegisterUser(user.copy())){
                 Snackbar
                     .make(it, "User Created", Snackbar.LENGTH_LONG)
                     .show()
-                val launcherIntent = Intent(this, WelcomeActivity::class.java)
-                geosurfIntentLauncher.launch(launcherIntent)
             } else {
                 Snackbar
                     .make(it, "User not created - fill all fields", Snackbar.LENGTH_LONG)
@@ -54,9 +46,4 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun registerGeosurfCallback() {
-        geosurfIntentLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            {  }
-    }
 }

@@ -32,6 +32,7 @@
     <string name="logout">Logout</string>
     <string name="image">image</string>
     <string name="button_geosurfList">Manage your SurfSpots</string>
+    <string name="login_success">Logged In</string>
 
 
     <string-array name="abilityLevels">
