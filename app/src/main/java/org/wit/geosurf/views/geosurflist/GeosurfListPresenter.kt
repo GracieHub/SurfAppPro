@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import org.wit.geosurf.main.MainApp
 import org.wit.geosurf.models.GeosurfModel
 import org.wit.geosurf.views.geosurf.GeosurfView
+import org.wit.geosurf.views.login.LoginView
 import org.wit.geosurf.views.map.GeosurfMapView
 
 
@@ -14,6 +15,8 @@ class GeosurfListPresenter(val view: GeosurfListView) {
     var app: MainApp
     private lateinit var refreshIntentLauncher: ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher: ActivityResultLauncher<Intent>
+    private lateinit var editIntentLauncher : ActivityResultLauncher<Intent>
+
 
     init {
         app = view.application as MainApp
@@ -50,4 +53,9 @@ class GeosurfListPresenter(val view: GeosurfListView) {
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { }
     }
+    fun doLogout(){
+        val launcherIntent = Intent(view, LoginView::class.java)
+        editIntentLauncher.launch(launcherIntent)
+    }
+
 }

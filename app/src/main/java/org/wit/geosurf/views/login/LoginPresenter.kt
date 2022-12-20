@@ -10,7 +10,7 @@ import org.wit.geosurf.views.geosurflist.GeosurfListView
 class LoginPresenter(private val view: LoginView) {
 
     var app: MainApp
-    private lateinit var geosurfIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var loginIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var registerIntentLauncher : ActivityResultLauncher<Intent>
 
     init{
@@ -22,11 +22,16 @@ class LoginPresenter(private val view: LoginView) {
     fun doLogin(username: String, password: String): Boolean {
         return if (app.users.login(username, password)) {
             val launcherIntent = Intent(view, GeosurfListView::class.java)
-            geosurfIntentLauncher.launch(launcherIntent)
+            loginIntentLauncher.launch(launcherIntent)
             true
         } else {
             false
         }
+    }
+
+    fun doSignUp(email: String, password: String) {
+        val launcherIntent = Intent(view, GeosurfListView::class.java)
+        loginIntentLauncher.launch(launcherIntent)
     }
 
     fun doRegister() {
@@ -35,7 +40,7 @@ class LoginPresenter(private val view: LoginView) {
     }
 
     private fun registerGeosurfCallback() {
-        geosurfIntentLauncher =
+        loginIntentLauncher =
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             {  }
     }

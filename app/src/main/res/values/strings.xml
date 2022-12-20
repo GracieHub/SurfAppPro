@@ -35,9 +35,13 @@
     <string name="login_success">Logged In</string>
     <string name="menu_map">Map</string>
     <string name="menu_home">Home</string>
-    <string name="menu_logout">Logout</string>
     <string name="menu_searchGeosurf">Search</string>
     <string name="search_hint">Search Surfspot by County</string>
+    <string name="title_activity_login"> Signup/Login to Geosurf</string>
+    <string name="menu_showMap">Show Map</string>
+    <string name="menu_logout">Logout</string>
+
+
 
 
 

@@ -51,7 +51,7 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
                     true
                 }
                 R.id.item_logout -> {
-                    //to Do with Firebase
+                     presenter.doLogout()
                     true
                 }
                 else -> false
