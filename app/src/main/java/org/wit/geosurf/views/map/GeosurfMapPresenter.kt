@@ -30,4 +30,8 @@ class GeosurfMapPresenter(val view: GeosurfMapView) {
         val geosurf = app.geosurfs.findById(tag)
         if (geosurf != null) view.showGeosurf(geosurf)
     }
+
+    fun doHome() {
+        view.finish()
+    }
 }

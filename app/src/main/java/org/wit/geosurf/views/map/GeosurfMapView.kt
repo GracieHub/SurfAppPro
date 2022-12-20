@@ -1,6 +1,7 @@
 package org.wit.geosurf.views.map
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
@@ -24,6 +25,8 @@ class GeosurfMapView : AppCompatActivity() , GoogleMap.OnMarkerClickListener{
         binding = ActivityGeosurfMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
 
         presenter = GeosurfMapPresenter(this)
 
@@ -70,5 +73,13 @@ class GeosurfMapView : AppCompatActivity() , GoogleMap.OnMarkerClickListener{
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         contentBinding.mapView.onSaveInstanceState(outState)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                presenter.doHome()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

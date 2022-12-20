@@ -37,6 +37,8 @@ class GeosurfView : AppCompatActivity() {
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
 
         //array of ability levels declared
         val abilityLevels = resources.getStringArray(R.array.abilityLevels)
@@ -50,6 +52,7 @@ class GeosurfView : AppCompatActivity() {
             geosurf.date = binding.geosurfDate.text.toString()
             geosurf.abilityLevel = binding.geosurfAbilityLevel.toString()
             geosurf.rating = binding.geosurfRating.rating.toFloat()
+            geosurf.county = binding.county.text.toString()
 
             if (geosurf.title.isEmpty()) {
                 Snackbar.make(it, R.string.enter_geosurf_title, Snackbar.LENGTH_LONG)
@@ -61,8 +64,12 @@ class GeosurfView : AppCompatActivity() {
                     geosurf.date,
                     geosurf.abilityLevel,
                     geosurf.rating,
+                    geosurf.county
                 )
             }
+            if (binding.geosurfLocation.text.toString().isEmpty()) {
+                Snackbar.make(it, R.string.enter_geosurf_county, Snackbar.LENGTH_LONG)
+                    .show()            }
             i("add Button Pressed: $geosurf")
             setResult(RESULT_OK)
             finish()
@@ -73,6 +80,7 @@ class GeosurfView : AppCompatActivity() {
             //        edit = true
             geosurf = intent.extras?.getParcelable("geosurf_edit")!!
             binding.geosurfTitle.setText(geosurf.title)
+            binding.county.setText(geosurf.county)
             binding.description.setText(geosurf.description)
             binding.geosurfDate.text = geosurf.date
             binding.datepicker.setText(R.string.update_date)
@@ -165,12 +173,16 @@ class GeosurfView : AppCompatActivity() {
                 R.id.item_delete -> {
                     presenter.doDelete()
                 }
+                android.R.id.home -> {
+                    presenter.doHome()
+                }
             }
             return super.onOptionsItemSelected(item)
         }
 
     fun showGeosurf(geosurf: GeosurfModel) {
         binding.geosurfTitle.setText(geosurf.title)
+        binding.county.setText(geosurf.county)
         binding.description.setText(geosurf.description)
         binding.geosurfDate.text = geosurf.date
         binding.datepicker.setText(R.string.update_date)
@@ -191,4 +203,6 @@ class GeosurfView : AppCompatActivity() {
             .into(binding.geosurfImage)
         binding.chooseImage.setText(R.string.change_geosurf_image)
     }
+
+    fun clickDataPicker(view: View) {}
 }

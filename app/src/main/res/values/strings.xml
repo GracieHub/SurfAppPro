@@ -2,7 +2,7 @@
     <string name="app_name">Geosurf</string>
     <string name="button_addGeosurf">Add Surf Spot</string>
     <string name="hint_geosurfTitle">Surf Spot Title</string>
-    <string name="hint_geosurfDescription">Description </string>
+    <string name="hint_geosurfDescription">Description:  </string>
     <string name="hint_geosurfAbilityLevel">SurfSpot Ability Level</string>
     <string name="hint_geosurfDate">Date</string>
     <string name="menu_addGeosurf">Add</string>
@@ -13,7 +13,7 @@
     <string name="button_addImage"> Add Image </string>
     <string name="select_geosurf_image">Select surf spot image</string>
     <string name="change_geosurf_image">Change surf spot image</string>
-    <string name="button_location">Set Location</string>
+    <string name="button_location">Add Location</string>
     <string name="title_activity_map">Surf Map</string>
     <string name="menu_deleteGeosurf">Delete</string>
     <string name="selected_abilityLevel">Ability Level:</string>
@@ -33,6 +33,12 @@
     <string name="image">image</string>
     <string name="button_geosurfList">Manage your SurfSpots</string>
     <string name="login_success">Logged In</string>
+    <string name="menu_map">Map</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_searchGeosurf">Search</string>
+    <string name="search_hint">Search Surfspot by County</string>
+
 
 
     <string-array name="abilityLevels">
@@ -51,4 +57,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="enter_geosurf_county">Enter County</string>
+    <string name="select_date">Select Date</string>
+    <string name="hint_geosurfCounty">Enter County</string>
+    <string name="button_county">County</string>
 </resources>

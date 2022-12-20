@@ -60,10 +60,12 @@ class GeosurfPresenter ( val view: GeosurfView) {
         description: String,
         date: String,
         abilityLevel: String,
-        rating: Float
+        rating: Float,
+        county: String
     ) {
         geosurf.title = title
         geosurf.description = description
+        geosurf.county = county
         geosurf.rating = rating
         geosurf.date = date
         geosurf.abilityLevel = abilityLevel
@@ -95,13 +97,15 @@ class GeosurfPresenter ( val view: GeosurfView) {
         description: String,
         rating: Float,
         date: String,
-        abilityLevel: String
+        abilityLevel: String,
+        location: String
     ) {
         geosurf.title = title
         geosurf.description = description
         geosurf.rating = rating
         geosurf.date = date
         geosurf.abilityLevel = abilityLevel
+        geosurf.county = location
     }
 
     fun doDelete() {
@@ -122,7 +126,7 @@ class GeosurfPresenter ( val view: GeosurfView) {
         geosurf.lat = lat
         geosurf.lng = lng
         geosurf.zoom = 15f
-        // view.showTravelmark(travelmark)
+        // view.showGeosurf(geosurf)
     }
 
     @SuppressLint("MissingPermission")

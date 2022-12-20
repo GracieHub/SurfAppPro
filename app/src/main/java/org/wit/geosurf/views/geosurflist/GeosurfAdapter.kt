@@ -37,7 +37,8 @@ class GeosurfAdapter constructor
         fun bind(geosurf: GeosurfModel, listener: GeosurfListener) {
             binding.geosurfTitle.text = geosurf.title
             // binding.geosurfAbilityLevel.text = geosurf.abilityLevel
-            binding.description.text = ("Descriptions" + geosurf.description)
+            binding.geosurfDescription.text = ("Description: " + geosurf.description)
+            binding.geosurfCounty.text =("County: " + geosurf.county)
             binding.geosurfDate.text = ("Date added: " +geosurf.date)
             Picasso.get().load(geosurf.image).resize(200,200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onGeosurfClick(geosurf) }

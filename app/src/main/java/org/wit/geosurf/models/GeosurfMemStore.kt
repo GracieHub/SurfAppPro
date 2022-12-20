@@ -34,6 +34,7 @@ class GeosurfMemStore : GeosurfStore {
             foundGeosurf.date = geosurf.date
             foundGeosurf.abilityLevel = geosurf.abilityLevel
             foundGeosurf.rating =geosurf.rating
+            foundGeosurf.county = geosurf.county
 
             logAll()
         }

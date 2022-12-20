@@ -43,7 +43,7 @@
                         tools:text="A Title" />
 
                     <TextView
-                        android:id="@+id/description"
+                        android:id="@+id/geosurfDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -52,12 +52,24 @@
                         app:layout_constraintHorizontal_bias="0.052"
                         app:layout_constraintStart_toEndOf="@+id/imageIcon"
                         app:layout_constraintTop_toBottomOf="@id/geosurfTitle"
-                        tools:text="A Description" />
+                        tools:text="Description" />
 
+                    <TextView
+                        android:id="@+id/geosurfCounty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/teal_700"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.052"
+                        app:layout_constraintStart_toEndOf="@+id/imageIcon"
+                        app:layout_constraintTop_toBottomOf="@id/geosurfDescription"
+                        />
 
                     <TextView
                         android:id="@+id/date_label"
-                        android:layout_width="wrap_content"
+                        android:layout_width="61dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="@string/hint_geosurfDate"
