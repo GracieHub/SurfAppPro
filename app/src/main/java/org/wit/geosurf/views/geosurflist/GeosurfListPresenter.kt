@@ -8,6 +8,8 @@ import org.wit.geosurf.models.GeosurfModel
 import org.wit.geosurf.views.geosurf.GeosurfView
 import org.wit.geosurf.views.login.LoginView
 import org.wit.geosurf.views.map.GeosurfMapView
+import com.google.firebase.auth.FirebaseAuth
+
 
 
 class GeosurfListPresenter(val view: GeosurfListView) {
@@ -16,12 +18,15 @@ class GeosurfListPresenter(val view: GeosurfListView) {
     private lateinit var refreshIntentLauncher: ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher: ActivityResultLauncher<Intent>
     private lateinit var editIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var loginIntentLauncher : ActivityResultLauncher<Intent>
 
 
     init {
         app = view.application as MainApp
         registerMapCallback()
         registerRefreshCallback()
+        registerLoginCallback()
+
     }
 
     fun getGeosurfs() = app.geosurfs.findAll()
@@ -53,9 +58,17 @@ class GeosurfListPresenter(val view: GeosurfListView) {
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { }
     }
-    fun doLogout(){
+    fun doLogout() {
+        FirebaseAuth.getInstance().signOut()
         val launcherIntent = Intent(view, LoginView::class.java)
-        editIntentLauncher.launch(launcherIntent)
+        loginIntentLauncher.launch(launcherIntent)
+    }
+
+    private fun registerLoginCallback() {
+        loginIntentLauncher =
+            view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            {  }
+
     }
 
 }
