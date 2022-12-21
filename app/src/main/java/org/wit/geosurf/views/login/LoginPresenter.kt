@@ -6,6 +6,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import org.wit.geosurf.views.register.RegisterView
 import org.wit.geosurf.main.MainApp
 import org.wit.geosurf.views.geosurflist.GeosurfListView
+import com.google.firebase.auth.FirebaseAuth
+
 
 class LoginPresenter(private val view: LoginView) {
 
@@ -19,13 +21,18 @@ class LoginPresenter(private val view: LoginView) {
         registerRegisterCallback()
     }
 
-    fun doLogin(username: String, password: String): Boolean {
-        return if (app.users.login(username, password)) {
-            val launcherIntent = Intent(view, GeosurfListView::class.java)
-            loginIntentLauncher.launch(launcherIntent)
-            true
-        } else {
-            false
+    var auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    fun doLogin(username: String, password: String) {
+        view.showProgress()
+        auth.signInWithEmailAndPassword(username, password).addOnCompleteListener(view!!) { task ->
+            if (task.isSuccessful) {
+                val launcherIntent = Intent(view, GeosurfListView::class.java)
+                loginIntentLauncher.launch(launcherIntent)
+            } else {
+                view.showSnackBar("Login failed: ${task.exception?.message}")
+            }
+            view.hideProgress()
         }
     }
 

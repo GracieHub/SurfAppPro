@@ -65,4 +65,5 @@
     <string name="select_date">Select Date</string>
     <string name="hint_geosurfCounty">Enter County</string>
     <string name="button_county">County</string>
+    <string name="warning_enter_credentials">Please enter email and password</string>
 </resources>
