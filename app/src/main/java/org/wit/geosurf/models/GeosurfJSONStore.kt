@@ -29,19 +29,18 @@ class GeosurfJSONStore(private val context: Context) : GeosurfStore {
         }
     }
 
-    override fun findAll(): MutableList<GeosurfModel> {
+    override suspend fun findAll(): MutableList<GeosurfModel> {
         logAll()
         return geosurfs
     }
-
-    override fun create(geosurf: GeosurfModel) {
+    override suspend fun create(geosurf: GeosurfModel) {
         geosurf.id = generateRandomId()
         geosurfs.add(geosurf)
         serialize()
     }
 
 
-    override fun update(geosurf: GeosurfModel) {
+    override suspend fun update(geosurf: GeosurfModel) {
         val geosurfsList = findAll() as ArrayList<GeosurfModel>
         var foundGeosurf: GeosurfModel? = geosurfsList.find { p -> p.id == geosurf.id }
         if (foundGeosurf != null) {
@@ -60,7 +59,7 @@ class GeosurfJSONStore(private val context: Context) : GeosurfStore {
         serialize()
     }
 
-    override fun delete(geosurf: GeosurfModel) {
+    override suspend fun delete(geosurf: GeosurfModel) {
         geosurfs.remove(geosurf)
         serialize()
     }
@@ -79,9 +78,18 @@ class GeosurfJSONStore(private val context: Context) : GeosurfStore {
         geosurfs.forEach { Timber.i("$it") }
     }
 
-    override fun findById(id:Long) : GeosurfModel? {
+    override suspend fun findById(id:Long) : GeosurfModel? {
         val foundGeosurf: GeosurfModel? = geosurfs.find { it.id == id }
         return foundGeosurf
+    }
+
+    override suspend fun findGeosurfById(geosurfId: Long): GeosurfModel? {
+        var foundGeosurf: GeosurfModel? = geosurfs.find { t -> t.id == geosurfId }
+        return foundGeosurf
+    }
+
+    override suspend fun clear(){
+        geosurfs.clear()
     }
 }
 

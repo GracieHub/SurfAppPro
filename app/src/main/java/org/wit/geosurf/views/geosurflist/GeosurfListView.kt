@@ -9,6 +9,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.wit.geosurf.R
 import org.wit.geosurf.databinding.ActivityGeosurfListBinding
 import org.wit.geosurf.main.MainApp
@@ -33,7 +36,9 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        loadGeosurfs()
+        GlobalScope.launch(Dispatchers.Main) {
+            loadGeosurfs()
+        }
 
         bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
         bottomNav.setOnNavigationItemSelectedListener { item ->
@@ -51,7 +56,9 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
                     true
                 }
                 R.id.item_logout -> {
-                     presenter.doLogout()
+                    GlobalScope.launch(Dispatchers.IO) {
+                        presenter.doLogout()
+                    }
                     true
                 }
                 else -> false
@@ -71,18 +78,23 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
         // below line is to call set on query text listener method.
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                filter(query)
-                //i(query)
+                GlobalScope.launch(Dispatchers.Main) {
+                    filter(query)
+                }
+                //i(msg)
                 return false
             }
 
             override fun onQueryTextChange(msg: String): Boolean {
-                filter(msg)
+                GlobalScope.launch(Dispatchers.Main) {
+                    filter(msg)
+                }
                 //i(msg)
                 return false
             }
         })
-        return true    }
+        return true
+    }
 
     override fun onGeosurfClick(geosurf: GeosurfModel) {
         presenter.doEditGeosurf(geosurf)
@@ -91,20 +103,27 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun loadGeosurfs() {
-        binding.recyclerView.adapter = GeosurfAdapter(presenter.getGeosurfs(),this)
+        GlobalScope.launch(Dispatchers.Main) {
+            showGeosurfs(presenter.getGeosurfs())
+        }
+    }
+    fun showGeosurfs (geosurfs: List<GeosurfModel>) {
+        binding.recyclerView.adapter = GeosurfAdapter(geosurfs, this)
         binding.recyclerView.adapter?.notifyDataSetChanged()
     }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
-        loadGeosurfs()
+        GlobalScope.launch(Dispatchers.Main) {
+            loadGeosurfs()
+        }
         binding.recyclerView.adapter?.notifyDataSetChanged()
         i("recyclerView onResume")
         bottomNav.setSelectedItemId(android.R.id.home)
         super.onResume()
     }
 
-    private fun filter(text: String) {
+    @SuppressLint("NotifyDataSetChanged")
+    private suspend fun filter(text: String) {
         val filteredlist: MutableList<GeosurfModel> = mutableListOf()
 
         for (item in app.geosurfs.findAll()) {

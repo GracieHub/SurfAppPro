@@ -1,6 +1,5 @@
 package org.wit.geosurf.models
 
-import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import android.widget.DatePicker
@@ -9,9 +8,10 @@ import java.time.LocalDate
 
 @Parcelize
 data class GeosurfModel(var id: Long = 0,
+                        var fbId: String = "",
+                        var image: String = "",
                         var title: String = "",
                         var description: String = "",
-                        var image: Uri = Uri.EMPTY,
                         var lat : Double = 0.0,
                         var lng: Double = 0.0,
                         var county: String = "",

@@ -55,7 +55,7 @@ class GeosurfPresenter ( val view: GeosurfView) {
         registerMapCallback()
     }
 
-    fun doAddOrSave(
+    suspend fun doAddOrSave(
         title: String,
         description: String,
         date: String,
@@ -108,7 +108,7 @@ class GeosurfPresenter ( val view: GeosurfView) {
         geosurf.county = location
     }
 
-    fun doDelete() {
+    suspend fun doDelete() {
         app.geosurfs.delete(geosurf)
         view.finish()
     }
@@ -133,7 +133,11 @@ class GeosurfPresenter ( val view: GeosurfView) {
     fun doSetCurrentLocation() {
         Timber.i("setting location from doSetLocation")
         locationService.lastLocation.addOnSuccessListener {
-            locationUpdate(it.latitude, it.longitude)
+            if (it != null) {
+                locationUpdate(it.latitude, it.longitude)
+            } else {
+                locationUpdate(52.1585, 7.1444)
+            }
         }
     }
 
@@ -145,7 +149,7 @@ class GeosurfPresenter ( val view: GeosurfView) {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
-                            geosurf.image = result.data!!.data!!
+                            geosurf.image = result.data!!.data!!.toString()
                             view.updateImage(geosurf.image)
                             Picasso.get()
                                 .load(geosurf.image)

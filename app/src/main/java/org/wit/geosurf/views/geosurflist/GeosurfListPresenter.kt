@@ -9,7 +9,9 @@ import org.wit.geosurf.views.geosurf.GeosurfView
 import org.wit.geosurf.views.login.LoginView
 import org.wit.geosurf.views.map.GeosurfMapView
 import com.google.firebase.auth.FirebaseAuth
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class GeosurfListPresenter(val view: GeosurfListView) {
@@ -29,7 +31,7 @@ class GeosurfListPresenter(val view: GeosurfListView) {
 
     }
 
-    fun getGeosurfs() = app.geosurfs.findAll()
+    suspend fun getGeosurfs() = app.geosurfs.findAll()
 
     fun doAddGeosurf() {
         val launcherIntent = Intent(view,GeosurfView::class.java)
@@ -50,16 +52,22 @@ class GeosurfListPresenter(val view: GeosurfListView) {
     private fun registerRefreshCallback() {
         refreshIntentLauncher =
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { getGeosurfs() }
+            {
+                GlobalScope.launch(Dispatchers.Main){
+                    getGeosurfs()
+                }
+            }
     }
+
 
     private fun registerMapCallback() {
         mapIntentLauncher =
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { }
     }
-    fun doLogout() {
+    suspend fun doLogout() {
         FirebaseAuth.getInstance().signOut()
+        app.geosurfs.clear()
         val launcherIntent = Intent(view, LoginView::class.java)
         loginIntentLauncher.launch(launcherIntent)
     }
@@ -70,5 +78,4 @@ class GeosurfListPresenter(val view: GeosurfListView) {
             {  }
 
     }
-
 }

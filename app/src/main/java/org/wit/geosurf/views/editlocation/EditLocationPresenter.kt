@@ -28,9 +28,10 @@ class EditLocationPresenter (val view: EditLocationView) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, location.zoom))
         map.setOnMarkerDragListener(view)
         map.setOnMarkerClickListener(view)
+        map.uiSettings.setZoomControlsEnabled(true)
     }
 
-    fun doUpdateLocation(lat: Double, lng: Double, zoom: Float) {
+        fun doUpdateLocation(lat: Double, lng: Double, zoom: Float) {
         location.lat = lat
         location.lng = lng
         location.zoom = zoom

@@ -14,8 +14,10 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        geosurfs = GeosurfJSONStore(applicationContext)
+   //     geosurfs = GeosurfJSONStore(applicationContext)
    //     users = UserJSONStore(applicationContext)
+        geosurfs = GeosurfFireStore(applicationContext)
+
         i("Geosurf started")
     }
 }
