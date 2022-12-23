@@ -59,6 +59,9 @@ class GeosurfListPresenter(val view: GeosurfListView) {
             }
     }
 
+    suspend fun doDelete(travelmark: GeosurfModel) {
+        app.geosurfs.delete(travelmark)
+    }
 
     private fun registerMapCallback() {
         mapIntentLauncher =

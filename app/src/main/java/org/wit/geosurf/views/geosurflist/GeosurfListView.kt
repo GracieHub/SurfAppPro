@@ -17,6 +17,10 @@ import org.wit.geosurf.databinding.ActivityGeosurfListBinding
 import org.wit.geosurf.main.MainApp
 import org.wit.geosurf.models.GeosurfModel
 import timber.log.Timber.i
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
+import org.wit.geosurf.helpers.SwipeToDeleteCallback
+
 
 class GeosurfListView : AppCompatActivity(), GeosurfListener {
 
@@ -24,6 +28,8 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
     private lateinit var binding: ActivityGeosurfListBinding
     lateinit var bottomNav : BottomNavigationView
     lateinit var presenter: GeosurfListPresenter
+    private lateinit var geosurfList: List<GeosurfModel>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +43,7 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         GlobalScope.launch(Dispatchers.Main) {
+            geosurfList = presenter.getGeosurfs()
             loadGeosurfs()
         }
 
@@ -65,6 +72,19 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
             }
         }
 
+        val swipeDeleteHandler = object : SwipeToDeleteCallback(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = binding.recyclerView.adapter as GeosurfAdapter
+                var geosurf = geosurfList[viewHolder.adapterPosition]
+                adapter.removeAt(viewHolder.adapterPosition)
+                i("Deleting surfspot: $geosurf")
+                GlobalScope.launch(Dispatchers.IO) {
+                    presenter.doDelete(geosurf)
+                }
+            }
+        }
+        val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
+        itemTouchDeleteHelper.attachToRecyclerView(binding.recyclerView)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -104,10 +124,10 @@ class GeosurfListView : AppCompatActivity(), GeosurfListener {
     @SuppressLint("NotifyDataSetChanged")
     private fun loadGeosurfs() {
         GlobalScope.launch(Dispatchers.Main) {
-            showGeosurfs(presenter.getGeosurfs())
+            showGeosurfs(presenter.getGeosurfs() as MutableList<GeosurfModel>)
         }
     }
-    fun showGeosurfs (geosurfs: List<GeosurfModel>) {
+    fun showGeosurfs (geosurfs: MutableList<GeosurfModel>) {
         binding.recyclerView.adapter = GeosurfAdapter(geosurfs, this)
         binding.recyclerView.adapter?.notifyDataSetChanged()
     }

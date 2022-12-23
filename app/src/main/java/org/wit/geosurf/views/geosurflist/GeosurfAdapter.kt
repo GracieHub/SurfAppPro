@@ -13,7 +13,7 @@ interface GeosurfListener {
 }
 
 class GeosurfAdapter constructor
-    (private var geosurfs: List<GeosurfModel>,
+    (private var geosurfs: MutableList<GeosurfModel>,
      private val listener: GeosurfListener) :
     RecyclerView.Adapter<GeosurfAdapter.MainHolder>() {
 
@@ -29,6 +29,10 @@ class GeosurfAdapter constructor
         holder.bind(geosurf, listener)
     }
 
+    fun removeAt(position: Int) {
+        geosurfs.removeAt(position)
+        notifyItemRemoved(position)
+    }
     override fun getItemCount(): Int = geosurfs.size
 
     class MainHolder(private val binding : CardGeosurfBinding) :
