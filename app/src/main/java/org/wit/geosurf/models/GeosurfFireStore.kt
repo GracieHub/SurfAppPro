@@ -1,13 +1,21 @@
 package org.wit.geosurf.models
 
 import android.content.Context
+import android.graphics.Bitmap
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import org.wit.geosurf.helpers.readImageFromPath
+import timber.log.Timber.i
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 class GeosurfFireStore(val context: Context) : GeosurfStore {
     val geosurfs = ArrayList<GeosurfModel>()
     lateinit var userId: String
     var db: DatabaseReference = FirebaseDatabase.getInstance().reference
+    lateinit var st: StorageReference
 
 
     override suspend fun findAll(): List<GeosurfModel> {
@@ -30,6 +38,8 @@ class GeosurfFireStore(val context: Context) : GeosurfStore {
             geosurf.fbId = key
             geosurfs.add(geosurf)
             db.child("users").child(userId).child("geosurfs").child(key).setValue(geosurf)
+            updateImage(geosurf)
+
         }
     }
 
@@ -49,7 +59,9 @@ class GeosurfFireStore(val context: Context) : GeosurfStore {
             foundGeosurf.rating =geosurf.rating
         }
         db.child("users").child(userId).child("geosurfs").child(geosurf.fbId).setValue(geosurf)
-
+        if(geosurf.image.length > 0){
+            updateImage(geosurf)
+        }
     }
 
     override suspend fun delete(geosurf: GeosurfModel) {
@@ -76,9 +88,38 @@ class GeosurfFireStore(val context: Context) : GeosurfStore {
             }
         }
         userId = FirebaseAuth.getInstance().currentUser!!.uid
+        st = FirebaseStorage.getInstance("gs://surfapppro.appspot.com").reference
         db = FirebaseDatabase.getInstance("\n" + "https://surfapppro-default-rtdb.europe-west1.firebasedatabase.app").reference
         geosurfs.clear()
         db.child("users").child(userId).child("geosurfs")
             .addListenerForSingleValueEvent(valueEventListener)
+    }
+
+    fun updateImage(geosurf: GeosurfModel) {
+        if (geosurf.image != "") {
+            val fileName = File(geosurf.image)
+            val imageName = fileName.getName()
+
+            var imageRef = st.child(userId + '/' + imageName)
+            val baos = ByteArrayOutputStream()
+            val bitmap = readImageFromPath(context, geosurf.image)
+
+            bitmap?.let {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val data = baos.toByteArray()
+                val uploadTask = imageRef.putBytes(data)
+                uploadTask.addOnFailureListener {
+                    println(it.message)
+                }.addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {
+                        geosurf.image = it.toString()
+                        db.child("users").child(userId).child("geosurfs").child(geosurf.fbId).setValue(geosurf)
+                    }
+                }.addOnFailureListener {
+                    var errorMessage = it.message
+                    i("Failure: $errorMessage")
+                }
+            }
+        }
     }
 }
