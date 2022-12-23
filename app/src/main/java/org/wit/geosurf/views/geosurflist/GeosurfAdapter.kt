@@ -40,7 +40,9 @@ class GeosurfAdapter constructor
             binding.geosurfDescription.text = ("Description: " + geosurf.description)
             binding.geosurfCounty.text =("County: " + geosurf.county)
             binding.geosurfDate.text = ("Date added: " +geosurf.date)
-            Picasso.get().load(geosurf.image).resize(200,200).into(binding.imageIcon)
+            if (geosurf.image != "") {
+                Picasso.get().load(geosurf.image).resize(250, 250).into(binding.imageIcon)
+            }
             binding.root.setOnClickListener { listener.onGeosurfClick(geosurf) }
 
         }

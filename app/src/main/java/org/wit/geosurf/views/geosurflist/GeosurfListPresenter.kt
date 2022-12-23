@@ -8,6 +8,10 @@ import org.wit.geosurf.models.GeosurfModel
 import org.wit.geosurf.views.geosurf.GeosurfView
 import org.wit.geosurf.views.login.LoginView
 import org.wit.geosurf.views.map.GeosurfMapView
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class GeosurfListPresenter(val view: GeosurfListView) {
@@ -16,15 +20,18 @@ class GeosurfListPresenter(val view: GeosurfListView) {
     private lateinit var refreshIntentLauncher: ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher: ActivityResultLauncher<Intent>
     private lateinit var editIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var loginIntentLauncher : ActivityResultLauncher<Intent>
 
 
     init {
         app = view.application as MainApp
         registerMapCallback()
         registerRefreshCallback()
+        registerLoginCallback()
+
     }
 
-    fun getGeosurfs() = app.geosurfs.findAll()
+    suspend fun getGeosurfs() = app.geosurfs.findAll()
 
     fun doAddGeosurf() {
         val launcherIntent = Intent(view,GeosurfView::class.java)
@@ -45,17 +52,30 @@ class GeosurfListPresenter(val view: GeosurfListView) {
     private fun registerRefreshCallback() {
         refreshIntentLauncher =
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { getGeosurfs() }
+            {
+                GlobalScope.launch(Dispatchers.Main){
+                    getGeosurfs()
+                }
+            }
     }
+
 
     private fun registerMapCallback() {
         mapIntentLauncher =
             view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
             { }
     }
-    fun doLogout(){
+    suspend fun doLogout() {
+        FirebaseAuth.getInstance().signOut()
+        app.geosurfs.clear()
         val launcherIntent = Intent(view, LoginView::class.java)
-        editIntentLauncher.launch(launcherIntent)
+        loginIntentLauncher.launch(launcherIntent)
     }
 
+    private fun registerLoginCallback() {
+        loginIntentLauncher =
+            view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            {  }
+
+    }
 }

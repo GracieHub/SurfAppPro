@@ -21,7 +21,7 @@
     <string name="geosurf_rating_header">Rate SurfSpot</string>
     <string name="warning_incorrect_credentials">Incorrect Login Credentials</string>
     <string name="login_message">Sign in</string>
-    <string name="username_hint">Username</string>
+    <string name="username_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="button_sign_in">Sign in</string>
     <string name="button_register">Sign Up</string>
@@ -41,10 +41,6 @@
     <string name="menu_showMap">Show Map</string>
     <string name="menu_logout">Logout</string>
 
-
-
-
-
     <string-array name="abilityLevels">
         <item>Select Ability Level advised for this Surfspot</item>
         <item>Beginner</item>
@@ -52,6 +48,7 @@
         <item>Advanced</item>
         <item>Pro</item>
     </string-array>
+
     <string name="title_activity_geosurf_maps">Map of All Surfspots</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -65,4 +62,5 @@
     <string name="select_date">Select Date</string>
     <string name="hint_geosurfCounty">Enter County</string>
     <string name="button_county">County</string>
+    <string name="warning_enter_credentials">Please enter email and password</string>
 </resources>

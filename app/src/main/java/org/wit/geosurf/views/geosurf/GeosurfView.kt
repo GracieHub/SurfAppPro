@@ -2,7 +2,6 @@ package org.wit.geosurf.views.geosurf
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -15,6 +14,9 @@ import org.wit.geosurf.models.GeosurfModel
 import timber.log.Timber.i
 import android.view.View
 import android.widget.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 import android.widget.Spinner as Spinner
 
@@ -58,14 +60,16 @@ class GeosurfView : AppCompatActivity() {
                 Snackbar.make(it, R.string.enter_geosurf_title, Snackbar.LENGTH_LONG)
                     .show()
             } else {
-                presenter.doAddOrSave(
-                    geosurf.title,
-                    geosurf.description,
-                    geosurf.date,
-                    geosurf.abilityLevel,
-                    geosurf.rating,
-                    geosurf.county
-                )
+                GlobalScope.launch(Dispatchers.IO) {
+                    presenter.doAddOrSave(
+                        geosurf.title,
+                        geosurf.description,
+                        geosurf.date,
+                        geosurf.abilityLevel,
+                        geosurf.rating,
+                        geosurf.county
+                    )
+                }
             }
             if (binding.geosurfLocation.text.toString().isEmpty()) {
                 Snackbar.make(it, R.string.enter_geosurf_county, Snackbar.LENGTH_LONG)
@@ -86,10 +90,10 @@ class GeosurfView : AppCompatActivity() {
             binding.datepicker.setText(R.string.update_date)
             binding.geosurfRating.setRating(geosurf.rating)
             binding.btnAdd.setText(R.string.save_geosurf)
-            Picasso.get()
+            if (geosurf.image != "") {
+                Picasso.get()
                 .load(geosurf.image)
                 .into(binding.geosurfImage)
-            if (geosurf.image != Uri.EMPTY) {
                 binding.chooseImage.setText(R.string.change_geosurf_image)
             }
         }
@@ -171,7 +175,9 @@ class GeosurfView : AppCompatActivity() {
                     presenter.doCancel()
                 }
                 R.id.item_delete -> {
-                    presenter.doDelete()
+                    GlobalScope.launch(Dispatchers.IO) {
+                        presenter.doDelete()
+                    }
                 }
                 android.R.id.home -> {
                     presenter.doHome()
@@ -188,15 +194,15 @@ class GeosurfView : AppCompatActivity() {
         binding.datepicker.setText(R.string.update_date)
         binding.geosurfRating.setRating(geosurf.rating)
         binding.btnAdd.setText(R.string.save_geosurf)
-        Picasso.get()
+        if (geosurf.image != "") {
+            Picasso.get()
             .load(geosurf.image)
             .into(binding.geosurfImage)
-        if (geosurf.image != Uri.EMPTY) {
           binding.chooseImage.setText(R.string.change_geosurf_image)
     }
 }
 
-    fun updateImage(image: Uri){
+    fun updateImage(image: String){
         i("Image updated")
         Picasso.get()
             .load(image)

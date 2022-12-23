@@ -3,9 +3,14 @@ package org.wit.geosurf.views.map
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.wit.geosurf.databinding.ActivityGeosurfMapsBinding
 import org.wit.geosurf.databinding.ContentGeosurfMapsBinding
 import org.wit.geosurf.main.MainApp
@@ -32,23 +37,34 @@ class GeosurfMapView : AppCompatActivity() , GoogleMap.OnMarkerClickListener{
 
         contentBinding = ContentGeosurfMapsBinding.bind(binding.root)
         contentBinding.mapView.onCreate(savedInstanceState)
-        contentBinding.mapView.getMapAsync{
-            presenter.doPopulateMap(it)
+        contentBinding.mapView.getMapAsync {
+            GlobalScope.launch(Dispatchers.Main) {
+                presenter.doPopulateMap(it)
+            }
         }
     }
     fun showGeosurf(geosurf: GeosurfModel) {
         contentBinding.currentTitle.text = geosurf.title
         contentBinding.currentDescription.text = geosurf.description
-        Picasso.get()
+        if (geosurf.image != "") {
+            Picasso.get()
             .load(geosurf.image)
             .resize(200,200)
             .into(contentBinding.currentImage)
     }
-
-    override fun onMarkerClick(marker: Marker): Boolean {
-        presenter.doMarkerSelected(marker)
-        return true
+        contentBinding.mapView.getMapAsync {
+            val loc = LatLng(geosurf.lat, geosurf.lng)
+            it.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 10f))
+        }
     }
+
+        override fun onMarkerClick(marker: Marker): Boolean {
+        GlobalScope.launch(Dispatchers.Main) {
+            presenter.doMarkerSelected(marker)
+        }
+            return true
+        }
+
 
     override fun onDestroy() {
         super.onDestroy()
